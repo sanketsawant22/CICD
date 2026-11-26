@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: .
+    container_name: "express"
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - logs_data:/app/logs
+    environment:
+      PORT: "${PORT}"
+      MONGO_URL: mongodb://database:27017/usersdb
+    depends_on:
+      database:
+        condition: "service_healthy"
+
+  database:
+    image: mongo:8
+    container_name: "db"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test:
+        ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo-data:
+  logs_data:
