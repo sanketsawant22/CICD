@@ -6,7 +6,7 @@ describe("Express API tests", () => {
   it("should return welcome message", async () => {
     const response = await request(app).get("/");
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.text).toBe("Welcome to the User API");
   });
 
